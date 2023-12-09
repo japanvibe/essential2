@@ -45,7 +45,7 @@ class MainPage extends StatelessWidget {
           }
           return Center(child: const Text('Выберите период'));
         }), listener: ((context, state) {
-          if (state is TimerCheck) {
+          if (state is TimerCheckState) {
             startTimer(context, state, state.date);
           }
         })),
@@ -123,7 +123,7 @@ class MainPage extends StatelessWidget {
     context.read<TimerBloc>().add(StartTimerEvent());
     context.read<TimerBloc>().add(CountdownEvent(date));
     while (state is TimerInitial ||
-        state is TimerCheck ||
+        state is TimerCheckState ||
         state is TimeCountdownState) {
       await Future.delayed(const Duration(seconds: 1), () {
         context.read<TimerBloc>().add(CountdownEvent(date));

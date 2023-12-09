@@ -13,7 +13,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         int? millisecondsSinceEpoch = prefs.getInt('lastDate');
         DateTime date =
             DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch!);
-        emit(TimerCheck(date));
+        emit(TimerCheckState(date));
       }
     });
 
