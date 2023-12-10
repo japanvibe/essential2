@@ -38,7 +38,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
           await prefs.setInt('duration', countdownTime.inHours);
         }
         duration ??= prefs.getInt('duration');
-        if (countdownTime.inSeconds != 0) {
+        if (countdownTime.inSeconds > 0) {
           emit(TimeCountdownState(countdownTime));
         } else {
           emit(EndChallenge());
