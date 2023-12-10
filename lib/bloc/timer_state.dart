@@ -7,6 +7,7 @@ final class TimerInitial extends TimerState {}
 
 final class TimerCheckState extends TimerState {
   final DateTime date;
+
   TimerCheckState(this.date);
 }
 

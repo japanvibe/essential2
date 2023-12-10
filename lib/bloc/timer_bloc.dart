@@ -6,6 +6,8 @@ part 'timer_event.dart';
 part 'timer_state.dart';
 
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
+  int? duration;
+
   TimerBloc() : super(TimerInitial()) {
     on<TimerCheckEvent>((event, emit) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -32,6 +34,10 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
                 end: DateTime.fromMillisecondsSinceEpoch(
                     millisecondsSinceEpoch!))
             .duration;
+        if (!prefs.containsKey('duration')) {
+          await prefs.setInt('duration', countdownTime.inHours);
+        }
+        duration ??= prefs.getInt('duration');
         if (countdownTime.inSeconds != 0) {
           emit(TimeCountdownState(countdownTime));
         } else {
@@ -51,6 +57,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       final prefs = await SharedPreferences.getInstance();
       if (prefs.containsKey('lastDate')) {
         await prefs.remove('lastDate');
+        await prefs.remove('duration');
       }
     }));
   }

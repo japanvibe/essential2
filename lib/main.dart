@@ -1,9 +1,7 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:essential2/bloc/timer_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: BlocProvider(
-            create: ((context) => TimerBloc()), child: MainPage()));
+            create: ((context) => TimerBloc()), child: const MainPage()));
   }
 }
 
@@ -32,18 +30,46 @@ class MainPage extends StatelessWidget {
         DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
 
     return Scaffold(
-        appBar: AppBar(title: Text('Essential')),
+        appBar: AppBar(title: const Text('Essential'), backgroundColor: Colors.blue),
         body: BlocConsumer<TimerBloc, TimerState>(builder: ((context, state) {
           if (state is TimeCountdownState) {
-            return Center(
-              child: Text(
-                '${state.countdownTime.inDays} дн. : ${state.countdownTime.inHours - state.countdownTime.inDays * 24} час. : ${state.countdownTime.inMinutes - state.countdownTime.inHours * 60} мин. : ${state.countdownTime.inSeconds - state.countdownTime.inMinutes * 60} сек.',
-                style:
-                    const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-              ),
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(7.0),
+                  child: SizedBox(
+                    height: 40,
+                    child: LiquidLinearProgressIndicator(
+                        value: (1 / context.read<TimerBloc>().duration!) *
+                            (context.read<TimerBloc>().duration! -
+                                state.countdownTime.inHours),
+                        valueColor: const AlwaysStoppedAnimation(Colors.blue),
+                        backgroundColor: Colors.white,
+                        borderColor: Colors.blue,
+                        borderWidth: 1.0,
+                        borderRadius: 5.0,
+                        direction: Axis.horizontal,
+                        center: Text(
+                          '${(1 / context.read<TimerBloc>().duration!) * (context.read<TimerBloc>().duration! - state.countdownTime.inHours) * 100}%',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Text(
+                    '${state.countdownTime.inDays}d : ${state.countdownTime.inHours - state.countdownTime.inDays * 24}h : ${state.countdownTime.inMinutes - state.countdownTime.inHours * 60}m : ${state.countdownTime.inSeconds - state.countdownTime.inMinutes * 60}s',
+                    style: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
             );
           }
-          return Center(child: const Text('Выберите период'));
+          return const Center(child: Text('Выберите период'));
         }), listener: ((context, state) {
           if (state is TimerCheckState) {
             startTimer(context, state, state.date);
