@@ -30,7 +30,8 @@ class MainPage extends StatelessWidget {
         DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
 
     return Scaffold(
-        appBar: AppBar(title: const Text('Essential'), backgroundColor: Colors.blue),
+        appBar: AppBar(
+            title: const Text('Essential'), backgroundColor: Colors.blue),
         body: BlocConsumer<TimerBloc, TimerState>(builder: ((context, state) {
           if (state is TimeCountdownState) {
             return Column(
@@ -52,7 +53,7 @@ class MainPage extends StatelessWidget {
                         borderRadius: 5.0,
                         direction: Axis.horizontal,
                         center: Text(
-                          '${(1 / context.read<TimerBloc>().duration!) * (context.read<TimerBloc>().duration! - state.countdownTime.inHours) * 100}%',
+                          '${((1 / context.read<TimerBloc>().duration!) * (context.read<TimerBloc>().duration! - state.countdownTime.inHours) * 100).round()}%',
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w600),
                         )),
