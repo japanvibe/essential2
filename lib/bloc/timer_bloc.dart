@@ -35,10 +35,10 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
                     millisecondsSinceEpoch!))
             .duration;
         if (!prefs.containsKey('duration')) {
-          await prefs.setInt('duration', countdownTime.inHours);
+          await prefs.setInt('duration', countdownTime.inMicroseconds);
         }
         duration ??= prefs.getInt('duration');
-        if (countdownTime.inSeconds > 0) {
+        if (countdownTime.inMicroseconds>0) {
           emit(TimeCountdownState(countdownTime));
         } else {
           emit(EndChallenge());

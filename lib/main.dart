@@ -45,7 +45,7 @@ class MainPage extends StatelessWidget {
                     child: LiquidLinearProgressIndicator(
                         value: (1 / context.read<TimerBloc>().duration!) *
                             (context.read<TimerBloc>().duration! -
-                                state.countdownTime.inHours),
+                                state.countdownTime.inMicroseconds),
                         valueColor: const AlwaysStoppedAnimation(Colors.blue),
                         backgroundColor: Colors.white,
                         borderColor: Colors.blue,
@@ -53,7 +53,7 @@ class MainPage extends StatelessWidget {
                         borderRadius: 5.0,
                         direction: Axis.horizontal,
                         center: Text(
-                          '${((1 / context.read<TimerBloc>().duration!) * (context.read<TimerBloc>().duration! - state.countdownTime.inHours) * 100).round()}%',
+                          '${((1 / context.read<TimerBloc>().duration!) * (context.read<TimerBloc>().duration! - state.countdownTime.inMicroseconds) * 100).round()}%',
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w600),
                         )),
