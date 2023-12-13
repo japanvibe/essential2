@@ -38,7 +38,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
           await prefs.setInt('duration', countdownTime.inMicroseconds);
         }
         duration ??= prefs.getInt('duration');
-        if (countdownTime.inMicroseconds>0) {
+        if (countdownTime.inMicroseconds > 0) {
           emit(TimeCountdownState(countdownTime));
         } else {
           emit(EndChallenge());
@@ -53,12 +53,13 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     );
 
     on<DropTimerEvent>(((event, emit) async {
-      emit(DropTimerState());
       final prefs = await SharedPreferences.getInstance();
       if (prefs.containsKey('lastDate')) {
         await prefs.remove('lastDate');
         await prefs.remove('duration');
+        duration = null;
       }
+      emit(DropTimerState());
     }));
   }
 }
